@@ -12,6 +12,7 @@ var cache = require('gulp-cache');
 var uglify = require('gulp-uglify');
 var htmlmin = require('gulp-htmlmin');
 var imagemin = require('gulp-imagemin');
+var jshint = require('gulp-jshint');
 var browserSync = require('browser-sync').create();
 var del = require('del');
 
@@ -31,6 +32,13 @@ gulp.task('html', function(){
   return gulp.src('src/**/*.html')
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest('dist'))
+});
+
+// Task to Lint Scripts
+gulp.task('lint', function() {
+  return gulp.src('js/main.js')
+      .pipe(jshint())
+      .pipe(jshint.reporter('default', {verbose: true}));
 });
 
 // Task to Process Scripts
@@ -63,7 +71,7 @@ gulp.task('browserSync', function() {
 });
 
 // Setup Watch Task
-gulp.task('watch', ['browserSync', 'styles', 'html', 'scripts', 'images'], function (){
+gulp.task('watch', ['browserSync', 'styles', 'html', 'lint', 'scripts', 'images'], function (){
   gulp.watch('src/scss/**/*.scss', ['styles']);
   gulp.watch('src/*.html', ['html', browserSync.reload]);
   gulp.watch('src/js/**/*.js', ['scripts', browserSync.reload]);
