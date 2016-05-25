@@ -1,0 +1,15 @@
+/*
+ * Sass Mixins
+ *
+ * This document contains a collection of useful Sass mixins. This allows the
+ * use of reuseable groups of styles for items such as vendor prefixes.
+ */
+
+// Clearfix Tool
+@mixin clearfix {
+  &:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+}
