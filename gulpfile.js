@@ -15,11 +15,17 @@ var imagemin = require('gulp-imagemin');
 var jshint = require('gulp-jshint');
 var browserSync = require('browser-sync').create();
 var del = require('del');
+var concat = require('gulp-concat');
+var prefix = require('gulp-autoprefixer');
+var sourcemaps = require('gulp-sourcemaps');
+
 
 // Task to Process Styles
 gulp.task('styles', function(){
   return gulp.src('src/scss/**/*.scss')
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(prefix("> 1%", "last 2 versions", "ie > 9"))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('src/css'))
     .pipe(gulp.dest('dist/css'))
     .pipe(browserSync.reload({
@@ -43,7 +49,8 @@ gulp.task('lint', function() {
 
 // Task to Process Scripts
 gulp.task('scripts', function() {
-  return gulp.src('src/js/**/*.js')
+  return gulp.src(['src/js/main.js','src/js/**/*.js'])
+    .pipe(concat('main.js'))
     .pipe(gulp.dest('dist/js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'))
